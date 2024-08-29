@@ -1,12 +1,20 @@
 import 'reflect-metadata';
-import { DataSource, In, MoreThan, MoreThanOrEqual, Not, Repository } from 'typeorm';
-import { User } from './entities/user';
-import { Question } from "./entities/question";
-import { Subject } from "./entities/subject";
+import { DataSource, Repository } from 'typeorm';
+import { Answer, Chapter, Comment, FriendRelation, Post, Progress, Question, Quiz, Stopwatch, Subject, User, UserQuizAttempt, Video} from './entities'
 
+let answerRepo: Repository<Answer>;
+let chapterRepo: Repository<Chapter>;
+let commentRepo: Repository<Comment>;
+let friendRelationsRepo: Repository<FriendRelation>;
+let postRepo: Repository<Post>;
+let progressRepo: Repository<Progress>;
 let questionRepo: Repository<Question>;
+let quizRepo: Repository<Quiz>;
+let stopwatchRepo: Repository<Stopwatch>;
 let subjectRepo: Repository<Subject>;
 let userRepo: Repository<User>;
+let userQuizAttemptsRepo: Repository<UserQuizAttempt>;
+let videoRepo: Repository<Video>;
 
 export async function initializeDatabase() {
   const dataSource = new DataSource({
@@ -16,9 +24,9 @@ export async function initializeDatabase() {
     schema: 'public',
     type: 'postgres',
     database: 'postgres',
-    port: 5432,
+    port: 6543,
     driver: require('pg'),
-    entities: [User],
+    entities: [Answer, Chapter, Comment, FriendRelation, Post, Progress, Question, Quiz, Stopwatch, Subject, User, UserQuizAttempt, Video],
     synchronize: false, // Set to true when you want to sync DB fields and tables with codebase
   });
   await dataSource
@@ -29,6 +37,30 @@ export async function initializeDatabase() {
   questionRepo = dataSource.getRepository(Question);
   subjectRepo = dataSource.getRepository(Subject);
   userRepo = dataSource.getRepository(User);
+  answerRepo = dataSource.getRepository(Answer);
+  chapterRepo = dataSource.getRepository(Chapter);
+  commentRepo = dataSource.getRepository(Comment);
+  friendRelationsRepo = dataSource.getRepository(FriendRelation);
+  postRepo = dataSource.getRepository(Post);
+  progressRepo = dataSource.getRepository(Progress);
+  quizRepo = dataSource.getRepository(Quiz);
+  stopwatchRepo = dataSource.getRepository(Stopwatch);
+  userQuizAttemptsRepo = dataSource.getRepository(UserQuizAttempt);
+  videoRepo = dataSource.getRepository(Video);
 }
 
-export { subjectRepo, questionRepo, userRepo };
+export {
+  questionRepo,
+  subjectRepo,
+  userRepo,
+  answerRepo,
+  chapterRepo,
+  commentRepo,
+  friendRelationsRepo,
+  postRepo,
+  progressRepo,
+  quizRepo,
+  stopwatchRepo,
+  userQuizAttemptsRepo,
+  videoRepo
+};
