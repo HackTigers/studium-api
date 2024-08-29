@@ -1,7 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  JoinTable,
+  ManyToMany
+} from "typeorm";
 import bcrypt from "bcrypt"
-import { Quiz } from "./quiz";
-import { JoinTable, ManyToMany } from "typeorm/browser";
+import { Exam } from "./exam";
 
 @Entity("users")
 export class User {
@@ -33,19 +40,19 @@ export class User {
   @Column({ nullable: true })
   profilePicture: string
 
-  // @ManyToMany(() => Quiz)
-  // @JoinTable({
-  //   name: "user_quizzes", // Name of the join table
-  //   joinColumn: {
-  //     name: "user_id",
-  //     referencedColumnName: "id"
-  //   },
-  //   inverseJoinColumn: {
-  //     name: "quiz_id",
-  //     referencedColumnName: "id"
-  //   }
-  // })
-  // enrolledExams: Quiz[];
+  @ManyToMany(() => Exam)
+  @JoinTable({
+    name: "user_exams", // Name of the join table
+    joinColumn: {
+      name: "user_id",
+      referencedColumnName: "id"
+    },
+    inverseJoinColumn: {
+      name: "exam_id",
+      referencedColumnName: "id"
+    }
+  })
+  enrolledExams: Exam[];
 
   @CreateDateColumn()
   createdAt: Date
@@ -59,5 +66,9 @@ export class User {
 
   async validatePassword(password: string) {
     return bcrypt.compare(password, this.password);
+  }
+
+  async setEnrolledExams(exams: Exam[]) {
+    this.enrolledExams = exams;
   }
 }

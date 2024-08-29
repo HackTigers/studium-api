@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express';
 import swaggerUi from "swagger-ui-express";
+import bodyParser from 'body-parser';
+import "reflect-metadata";
 
 import { initializeDatabase } from "./database/database";
 import { registerRouters } from "./routers";
@@ -12,6 +14,7 @@ const app = express();
 const port = constants.PORT;
 
 async function initializeApp() {
+  app.use(bodyParser.json());
   if(!validateEnv()) {
       console.log(`Please fix the environment variables and try again`);
       process.exit(1);

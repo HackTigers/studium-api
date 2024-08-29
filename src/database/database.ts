@@ -1,11 +1,12 @@
 import 'reflect-metadata';
 import { DataSource, Repository } from 'typeorm';
-import { Answer, Chapter, Comment, FriendRelation, Post, Progress, Question, Quiz, Stopwatch, Subject, User, UserQuizAttempt, Video} from './entities'
+import { Answer, Chapter, Comment, Exam, FriendRelation, Post, Progress, Question, Quiz, Stopwatch, Subject, User, UserQuizAttempt, Video} from './entities'
 import Constants from "../utils/constants";
 
 let answerRepo: Repository<Answer>;
 let chapterRepo: Repository<Chapter>;
 let commentRepo: Repository<Comment>;
+let examRepo: Repository<Exam>;
 let friendRelationsRepo: Repository<FriendRelation>;
 let postRepo: Repository<Post>;
 let progressRepo: Repository<Progress>;
@@ -27,7 +28,7 @@ export async function initializeDatabase() {
     database: 'postgres',
     port: 6543,
     driver: require('pg'),
-    entities: [Answer, Chapter, Comment, FriendRelation, Post, Progress, Question, Quiz, Stopwatch, Subject, User, UserQuizAttempt, Video],
+    entities: [Answer, Chapter, Comment, Exam, FriendRelation, Post, Progress, Question, Quiz, Stopwatch, Subject, User, UserQuizAttempt, Video],
     synchronize: true, // Set to true when you want to sync DB fields and tables with codebase
   });
   await dataSource
@@ -48,6 +49,7 @@ export async function initializeDatabase() {
   stopwatchRepo = dataSource.getRepository(Stopwatch);
   userQuizAttemptsRepo = dataSource.getRepository(UserQuizAttempt);
   videoRepo = dataSource.getRepository(Video);
+  examRepo = dataSource.getRepository(Exam);
 }
 
 export {
@@ -55,6 +57,7 @@ export {
   subjectRepo,
   userRepo,
   answerRepo,
+  examRepo,
   chapterRepo,
   commentRepo,
   friendRelationsRepo,

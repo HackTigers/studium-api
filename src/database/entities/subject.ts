@@ -1,11 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany } from "typeorm";
+import { Exam } from "./exam";
 
 @Entity("subjects")
 export class Subject {
-  constructor(id: string, name: string, description: string, createdAt: Date, updatedAt: Date) {
+  constructor(id: string, name: string, description: string, exams: Exam[], createdAt: Date, updatedAt: Date) {
     this.id = id;
     this.name = name;
     this.description = description;
+    this.exams = exams;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -24,4 +26,7 @@ export class Subject {
 
   @UpdateDateColumn()
   updatedAt: Date
+
+  @ManyToMany(() => Exam, (exam) => exam.subjects)
+  exams: Exam[];
 }

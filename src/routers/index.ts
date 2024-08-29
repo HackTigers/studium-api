@@ -1,10 +1,10 @@
 import { Express } from "express";
-import loginRouter from "./loginRouter";
+import authRouter from "./authRouter";
 import postRouter from "./postRouter";
 
 export async function registerRouters(app: Express) {
   const routers = [
-    { path: "/login", router: loginRouter },
+    { path: "/auth", router: authRouter },
     { path: "/post", router: postRouter },
   ];
 
