@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { DataSource, Repository } from 'typeorm';
 import { Answer, Chapter, Comment, FriendRelation, Post, Progress, Question, Quiz, Stopwatch, Subject, User, UserQuizAttempt, Video} from './entities'
+import Constants from "../utils/constants";
 
 let answerRepo: Repository<Answer>;
 let chapterRepo: Repository<Chapter>;
@@ -18,16 +19,16 @@ let videoRepo: Repository<Video>;
 
 export async function initializeDatabase() {
   const dataSource = new DataSource({
-    host: process.env.DATABASE_HOST,
-    username: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
+    host: Constants.DB_HOST,
+    username: Constants.DB_USER,
+    password: Constants.DB_PASS,
     schema: 'public',
     type: 'postgres',
     database: 'postgres',
     port: 6543,
     driver: require('pg'),
     entities: [Answer, Chapter, Comment, FriendRelation, Post, Progress, Question, Quiz, Stopwatch, Subject, User, UserQuizAttempt, Video],
-    synchronize: false, // Set to true when you want to sync DB fields and tables with codebase
+    synchronize: true, // Set to true when you want to sync DB fields and tables with codebase
   });
   await dataSource
     .initialize()

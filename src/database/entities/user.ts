@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
 import bcrypt from "bcrypt"
+import { Quiz } from "./quiz";
+import { JoinTable, ManyToMany } from "typeorm/browser";
 
 @Entity("users")
 export class User {
@@ -30,6 +32,20 @@ export class User {
 
   @Column({ nullable: true })
   profilePicture: string
+
+  // @ManyToMany(() => Quiz)
+  // @JoinTable({
+  //   name: "user_quizzes", // Name of the join table
+  //   joinColumn: {
+  //     name: "user_id",
+  //     referencedColumnName: "id"
+  //   },
+  //   inverseJoinColumn: {
+  //     name: "quiz_id",
+  //     referencedColumnName: "id"
+  //   }
+  // })
+  // enrolledExams: Quiz[];
 
   @CreateDateColumn()
   createdAt: Date

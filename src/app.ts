@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import swaggerUi from "swagger-ui-express";
-import dotenv from 'dotenv';
 
 import { initializeDatabase } from "./database/database";
 import { registerRouters } from "./routers";
@@ -13,16 +12,21 @@ const app = express();
 const port = constants.PORT;
 
 async function initializeApp() {
-  dotenv.config();
   if(!validateEnv()) {
       console.log(`Please fix the environment variables and try again`);
       process.exit(1);
   }
   bindLogger();
+  console.info("Studium API is starting...");
   await initializeDatabase();
   await registerRouters(app);
 
-  app.get('/', (_: Request, res: Response) => res.send('Studium API is running'));
+  app.get('/', (_: Request, res: Response) => {
+    res.json({
+      message: 'Studium API is running',
+      success: true
+    });
+  });
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.listen(port, () => console.info(`Server running at http://localhost:${port}`));
 }

@@ -3,8 +3,12 @@ import loginRouter from "./loginRouter";
 import postRouter from "./postRouter";
 
 export async function registerRouters(app: Express) {
-  const routers = [loginRouter, postRouter];
-  for(const router of routers) {
-    app.use(router);
+  const routers = [
+    { path: "/login", router: loginRouter },
+    { path: "/post", router: postRouter },
+  ];
+
+  for (const { path, router } of routers) {
+    app.use(path, router);
   }
 }
