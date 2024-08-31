@@ -3,7 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToMany,
-  JoinTable,
+  OneToMany,
 } from "typeorm";
 import { User } from "./user";
 import { Subject } from "./subject";
@@ -16,12 +16,9 @@ export class Exam {
   @Column()
   name: string;
 
-  @Column()
-  date: Date;
-
   @ManyToMany(() => Subject, (subject) => subject.exams)
   subjects: Subject[];
 
-  @ManyToMany(() => User, (user) => user.enrolledExams)
+  @OneToMany(() => User, (user) => user.enrolledExams)
   users: User[];
 }

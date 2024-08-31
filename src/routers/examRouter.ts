@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { adminAuthMiddleware } from "../middleware/auth";
+import { adminAuthMiddleware, authMiddleware } from "../middleware/auth";
 import { examRepo } from "../database/database";
 
 const router = express.Router();
@@ -7,15 +7,14 @@ const router = express.Router();
 // CREATE - Add a new exam
 router.post("/", adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const {name, subjects} = req.body;
+    const { name, subjects } = req.body;
     if (!name || !subjects) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
     const newExam = examRepo.create({
       name,
-      date: new Date(),
-      subjects
+      subjects,
     });
     res.status(201).json(newExam);
   } catch (error) {
@@ -24,7 +23,7 @@ router.post("/", adminAuthMiddleware, async (req: Request, res: Response) => {
 });
 
 // READ - Get all exams
-router.get("/", async (_req: Request, res: Response) => {
+router.get("/", authMiddleware, async (_req: Request, res: Response) => {
   try {
     const exams = await examRepo.find();
     res.json(exams);
@@ -34,13 +33,13 @@ router.get("/", async (_req: Request, res: Response) => {
 });
 
 // READ - Get a single exam by ID
-router.get("/:id", async (req: Request, res: Response) => {
+router.get("/:id", authMiddleware, async (req: Request, res: Response) => {
   try {
-    const exam = await examRepo.findBy({
-      id: req.params.id
+    const exam = await examRepo.findOne({
+      where: { id: req.params.id },
     });
     if (exam) {
-      res.json(exam);
+      res.json(exam[0]);
     } else {
       res.status(404).json({ message: "Exam not found" });
     }
@@ -52,15 +51,14 @@ router.get("/:id", async (req: Request, res: Response) => {
 // UPDATE - Update an exam by ID
 router.put("/:id", adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const {name, subjects} = req.body;
+    const { name, subjects } = req.body;
     if (!name || !subjects) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
     const updated = await examRepo.update(req.params.id, {
       name,
-      date: new Date(),
-      subjects
+      subjects,
     });
 
     if (updated) {
@@ -74,20 +72,24 @@ router.put("/:id", adminAuthMiddleware, async (req: Request, res: Response) => {
 });
 
 // DELETE - Delete an exam by ID
-router.delete("/:id", adminAuthMiddleware, async (req: Request, res: Response) => {
-  try {
-    const deleted = await examRepo.delete({
-      id: req.params.id
-    });
+router.delete(
+  "/:id",
+  adminAuthMiddleware,
+  async (req: Request, res: Response) => {
+    try {
+      const deleted = await examRepo.delete({
+        id: req.params.id,
+      });
 
-    if (deleted) {
-      res.status(204).send();
-    } else {
-      res.status(404).json({ message: "Exam not found" });
+      if (deleted) {
+        res.status(204).send();
+      } else {
+        res.status(404).json({ message: "Exam not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Error deleting exam", error });
     }
-  } catch (error) {
-    res.status(500).json({ message: "Error deleting exam", error });
   }
-});
+);
 
 export default router;

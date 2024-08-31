@@ -1,11 +1,28 @@
-import 'reflect-metadata';
-import { DataSource, Repository } from 'typeorm';
-import { Answer, Chapter, Comment, Exam, FriendRelation, Post, Progress, Question, Quiz, Stopwatch, Subject, User, UserQuizAttempt, Video} from './entities'
+import "reflect-metadata";
+import { DataSource, Repository } from "typeorm";
+import {
+  Answer,
+  Chapter,
+  Comment,
+  Class,
+  Exam,
+  FriendRelation,
+  Post,
+  Progress,
+  Question,
+  Quiz,
+  Stopwatch,
+  Subject,
+  User,
+  UserQuizAttempt,
+  Video,
+} from "./entities";
 import Constants from "../utils/constants";
 
 let answerRepo: Repository<Answer>;
 let chapterRepo: Repository<Chapter>;
 let commentRepo: Repository<Comment>;
+let classRepo: Repository<Class>;
 let examRepo: Repository<Exam>;
 let friendRelationsRepo: Repository<FriendRelation>;
 let postRepo: Repository<Post>;
@@ -23,18 +40,36 @@ export async function initializeDatabase() {
     host: Constants.DB_HOST,
     username: Constants.DB_USER,
     password: Constants.DB_PASS,
-    schema: 'public',
-    type: 'postgres',
-    database: 'postgres',
+    schema: "public",
+    type: "postgres",
+    database: "postgres",
     port: 6543,
-    driver: require('pg'),
-    entities: [Answer, Chapter, Comment, Exam, FriendRelation, Post, Progress, Question, Quiz, Stopwatch, Subject, User, UserQuizAttempt, Video],
+    driver: require("pg"),
+    entities: [
+      Answer,
+      Chapter,
+      Comment,
+      Class,
+      Exam,
+      FriendRelation,
+      Post,
+      Progress,
+      Question,
+      Quiz,
+      Stopwatch,
+      Subject,
+      User,
+      UserQuizAttempt,
+      Video,
+    ],
     synchronize: true, // Set to true when you want to sync DB fields and tables with codebase
   });
   await dataSource
     .initialize()
-    .then(() => console.info('Database connected successfully'))
-    .catch((err: Error) => console.error('Error during database initialization', err));
+    .then(() => console.info("Database connected successfully"))
+    .catch((err: Error) =>
+      console.error("Error during database initialization", err)
+    );
 
   questionRepo = dataSource.getRepository(Question);
   subjectRepo = dataSource.getRepository(Subject);
@@ -42,6 +77,7 @@ export async function initializeDatabase() {
   answerRepo = dataSource.getRepository(Answer);
   chapterRepo = dataSource.getRepository(Chapter);
   commentRepo = dataSource.getRepository(Comment);
+  classRepo = dataSource.getRepository(Class);
   friendRelationsRepo = dataSource.getRepository(FriendRelation);
   postRepo = dataSource.getRepository(Post);
   progressRepo = dataSource.getRepository(Progress);
@@ -59,6 +95,7 @@ export {
   answerRepo,
   examRepo,
   chapterRepo,
+  classRepo,
   commentRepo,
   friendRelationsRepo,
   postRepo,
@@ -66,5 +103,5 @@ export {
   quizRepo,
   stopwatchRepo,
   userQuizAttemptsRepo,
-  videoRepo
+  videoRepo,
 };
