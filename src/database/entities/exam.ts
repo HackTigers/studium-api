@@ -20,17 +20,6 @@ export class Exam {
   date: Date;
 
   @ManyToMany(() => Subject, (subject) => subject.exams)
-  @JoinTable({
-    name: "exam_subjects", // The name of the join table
-    joinColumn: {
-      name: "exam_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "subject_id",
-      referencedColumnName: "id",
-    },
-  })
   subjects: Subject[];
 
   @ManyToMany(() => User, (user) => user.enrolledExams)

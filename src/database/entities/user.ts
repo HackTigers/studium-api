@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   JoinTable,
-  ManyToMany
+  ManyToMany, OneToMany
 } from "typeorm";
 import bcrypt from "bcrypt"
 import { Exam } from "./exam";
@@ -40,19 +40,11 @@ export class User {
   @Column({ nullable: true })
   profilePicture: string
 
-  @ManyToMany(() => Exam)
-  @JoinTable({
-    name: "user_exams", // Name of the join table
-    joinColumn: {
-      name: "user_id",
-      referencedColumnName: "id"
-    },
-    inverseJoinColumn: {
-      name: "exam_id",
-      referencedColumnName: "id"
-    }
-  })
+  @OneToMany((type) => Exam, (exam) => exam.users)
   enrolledExams: Exam[];
+
+  @Column({ default: 'student' })
+  role: string
 
   @CreateDateColumn()
   createdAt: Date

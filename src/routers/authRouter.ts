@@ -75,13 +75,6 @@ router.post("/register", async (req: Request, res: Response) => {
     profilePicture,
   });
 
-  //todo: find out how to save enrolled exams since this wants an exam object
-  // const exams = await examRepo.findBy({
-  //     id: {
-  //       $in: enrolledExams
-  //     }
-  // })
-
   await newUser.setEnrolledExams(enrolledExams);
 
   await newUser.setPassword(password);

@@ -10,11 +10,13 @@ import { validateEnv } from "./utils/validation";
 
 import constants from "./utils/constants";
 import swaggerDocument from '../swagger.json';
+import { validationMiddleware } from "./middleware/validation";
 const app = express();
 const port = constants.PORT;
 
 async function initializeApp() {
   app.use(bodyParser.json());
+  app.use(validationMiddleware);
   if(!validateEnv()) {
       console.log(`Please fix the environment variables and try again`);
       process.exit(1);
