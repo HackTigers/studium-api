@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import { adminAuthMiddleware, authMiddleware } from "../middleware/auth";
 import { examRepo, userRepo } from "../database/database";
 import jwt from "jsonwebtoken";
-import constants from "src/utils/constants";
+import constants from "../utils/constants";
 
 const router = express.Router();
 
