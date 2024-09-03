@@ -4,42 +4,28 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
-  OneToOne,
+  ManyToMany,
+  ManyToOne,
   JoinTable,
+  OneToMany,
 } from "typeorm";
-import bcrypt from "bcrypt";
 import { Exam } from "./exam";
 import { Class } from "./class";
+import bcrypt from "bcrypt";
 
 @Entity("users")
 export class User {
-  constructor(
-    id: string,
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string,
-    createdAt: Date,
-    updatedAt: Date
-  ) {
-    this.id = id;
-    this.email = email;
-    this.password = password;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({ unique: true })
   email: string;
 
+  @Column({ unique: true })
+  username: string;
+
   @Column()
-  password: string; // Remember to hash this before storing
+  password: string;
 
   @Column({ nullable: false })
   firstName: string;
@@ -50,15 +36,16 @@ export class User {
   @Column({ nullable: true })
   profilePicture: string;
 
-  @OneToMany(() => Exam, (exam) => exam.users)
+  // @OneToMany(() => Exam, (exam) => exam.id)
+  @ManyToMany(() => Exam)
   @JoinTable()
   enrolledExams: Exam[];
 
-  @OneToOne(() => Class)
-  class: Class;
-
   @Column({ default: "student" })
   role: string;
+
+  @ManyToOne(() => Class, (userClass) => userClass.id)
+  class: Class;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -72,13 +59,5 @@ export class User {
 
   async validatePassword(password: string) {
     return bcrypt.compare(password, this.password);
-  }
-
-  async setEnrolledExams(exams: Exam[]) {
-    this.enrolledExams = exams;
-  }
-
-  async setClass(userClass: Class) {
-    this.class = userClass;
   }
 }

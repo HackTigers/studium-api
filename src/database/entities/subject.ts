@@ -1,32 +1,35 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToMany,
+  OneToMany,
+} from "typeorm";
 import { Exam } from "./exam";
+import { Chapter } from "./chapter";
 
 @Entity("subjects")
 export class Subject {
-  constructor(id: string, name: string, description: string, exams: Exam[], createdAt: Date, updatedAt: Date) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.exams = exams;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-
   @PrimaryGeneratedColumn("uuid")
-  id: string
+  id: string;
 
   @Column()
-  name: string
+  name: string;
 
-  @Column({ type: "text", nullable: true })
-  description: string
+  @Column({ nullable: true })
+  icon: string;
 
   @CreateDateColumn()
-  createdAt: Date
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 
   @ManyToMany(() => Exam, (exam) => exam.subjects)
   exams: Exam[];
+
+  @OneToMany(() => Chapter, (chapter) => chapter.subject)
+  chapters: Chapter[];
 }

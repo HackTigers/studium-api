@@ -1,31 +1,36 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+} from "typeorm";
+import { Subject } from "./subject";
 
 @Entity("chapters")
 export class Chapter {
-  constructor(id: string, title: string, description: string, index: number, createdAt: Date, updatedAt: Date) {
-    this.id = id;
-    this.title = title;
-    this.description = description;
-    this.index = index;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-
   @PrimaryGeneratedColumn("uuid")
-  id: string
+  id: string;
 
   @Column()
-  title: string
+  title: string;
 
   @Column({ type: "text", nullable: true })
-  description: string
+  description: string;
 
   @Column({ type: "int" })
-  index: number
+  index: number;
+
+  @Column()
+  aliases: string;
+
+  @ManyToOne(() => Subject, (subject) => subject.chapters)
+  subject: Subject;
 
   @CreateDateColumn()
-  createdAt: Date
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 }

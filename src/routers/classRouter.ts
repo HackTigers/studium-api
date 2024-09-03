@@ -5,7 +5,7 @@ import { classRepo } from "../database/database";
 const router = express.Router();
 
 // Get all classes (accessible to all authenticated users)
-router.get("/", authMiddleware, async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response) => {
   try {
     const classes = await classRepo.find();
     res.json(classes);
@@ -15,7 +15,7 @@ router.get("/", authMiddleware, async (req: Request, res: Response) => {
 });
 
 // Get a specific class by ID (accessible to all authenticated users)
-router.get("/:id", authMiddleware, async (req: Request, res: Response) => {
+router.get("/:id", async (req: Request, res: Response) => {
   try {
     const classEntity = await classRepo.findOne({
       where: { id: req.params.id },

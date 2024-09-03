@@ -32,14 +32,13 @@ router.get("/:id", authMiddleware, async (req: Request, res: Response) => {
 // Create a new subject (admin only)
 router.post("/", adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const { name, description } = req.body;
-    if (!name || !description) {
+    const { name } = req.body;
+    if (!name) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
     const newSubject = subjectRepo.create({
       name,
-      description,
     });
     const result = await subjectRepo.save(newSubject);
     res.status(201).json(result);
@@ -50,14 +49,13 @@ router.post("/", adminAuthMiddleware, async (req: Request, res: Response) => {
 
 router.put("/:id", adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const { name, description } = req.body;
-    if (!name || !description) {
+    const { name } = req.body;
+    if (!name) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
     const updated = await subjectRepo.update(req.params.id, {
       name,
-      description,
     });
 
     if (updated) {

@@ -1,36 +1,33 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm"
-import { Quiz } from "./quiz"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+} from "typeorm";
+import { Quiz } from "./quiz";
 
 @Entity("questions")
 export class Question {
-  constructor(id: string, quiz: Quiz, text: string, answer: string, aiAnswer: string, createdAt: Date, updatedAt: Date) {
-    this.id = id;
-    this.quiz = quiz;
-    this.text = text;
-    this.answer = answer;
-    this.aiAnswer = aiAnswer;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-
   @PrimaryGeneratedColumn("uuid")
-  id: string
+  id: string;
 
-  @ManyToOne(() => Quiz, quiz => quiz.id)
-  quiz: Quiz
+  @ManyToOne(() => Quiz, (quiz) => quiz.id)
+  quiz: Quiz;
 
   @Column({ type: "text" })
-  text: string
+  text: string;
 
   @Column({ type: "text", nullable: true })
-  answer: string
+  answer: string;
 
   @Column({ type: "text", nullable: true })
-  aiAnswer: string
+  aiAnswer: string;
 
   @CreateDateColumn()
-  createdAt: Date
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 }

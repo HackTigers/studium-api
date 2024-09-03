@@ -1,6 +1,8 @@
 import express, { Request, Response } from "express";
 import { adminAuthMiddleware, authMiddleware } from "../middleware/auth";
-import { examRepo } from "../database/database";
+import { examRepo, userRepo } from "../database/database";
+import jwt from "jsonwebtoken";
+import constants from "src/utils/constants";
 
 const router = express.Router();
 
@@ -23,17 +25,37 @@ router.post("/", adminAuthMiddleware, async (req: Request, res: Response) => {
 });
 
 // READ - Get all exams
-router.get("/", authMiddleware, async (_req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response) => {
   try {
-    const exams = await examRepo.find();
-    res.json(exams);
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      const exams = await examRepo.find();
+      return res.json(exams);
+    }
+
+    const decoded = jwt.verify(token, constants.JWT_SECRET) as { id: string };
+    const userId = decoded.id;
+
+    const user = await userRepo.findOne({
+      where: { id: userId },
+      relations: ["enrolledExams", "enrolledExams.subjects"],
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user.enrolledExams);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching exams", error });
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+    res.status(500).json({ message: "Error fetching enrolled exams", error });
   }
 });
 
 // READ - Get a single exam by ID
-router.get("/:id", authMiddleware, async (req: Request, res: Response) => {
+router.get("/:id", async (req: Request, res: Response) => {
   try {
     const exam = await examRepo.findOne({
       where: { id: req.params.id },
