@@ -4,7 +4,7 @@
   "description": "Backend for the Studium app using ExpressJS & MongoDB",
   "main": "app.js",
   "scripts": {
-    "start": "npm run build && nodemon build/app.js",
+    "start": "npm run build && node build/app.js",
     "build": "tsc",
     "build:watch": "tsc -w",
     "serve": "node build/app.js",

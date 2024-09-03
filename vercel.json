@@ -1,3 +1,8 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/app" }]
+  "functions": {
+    "build/app.js": {
+      "runtime": "nodejs14.x"
+    }
+  },
+  "rewrites": [{ "source": "/(.*)", "destination": "/build/app.js" }]
 }
