@@ -8,6 +8,7 @@ import { initializeDatabase } from "./database/database";
 import { registerRouters } from "./routers";
 import { bindLogger } from "./utils/logging";
 import { validateEnv } from "./utils/validation";
+import serverless from "serverless-http";
 
 import constants from "./utils/constants";
 import swaggerDocument from "../swagger.json";
@@ -68,3 +69,5 @@ process.on("unhandledRejection", (reason, promise) => {
 process.on("uncaughtException", (error) => {
   console.error("Uncaught Exception thrown", error);
 });
+
+export const handler = serverless(app);

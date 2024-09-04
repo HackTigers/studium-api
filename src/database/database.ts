@@ -45,6 +45,7 @@ export async function initializeDatabase() {
     database: "postgres",
     port: 6543,
     driver: require("pg"),
+    ssl: false,
     entities: [
       Answer,
       Chapter,

@@ -26,5 +26,7 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "emitDecoratorMetadata": true
-  }
+  },
+  "include": ["src/**/*.ts", "netlify/**/*.ts"],
+  "exclude": ["node_modules"]
 }
